@@ -1,0 +1,4750 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Acoustic Doppler Trainer
+    </title>
+
+    <style>
+/* ========================================
+   GLOBAL
+   ======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    background: #0b1016;
+    color: #d8e2ea;
+
+    font-family:
+        Arial,
+        "Microsoft JhengHei",
+        sans-serif;
+}
+
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.header {
+    min-height: 80px;
+
+    background: #111a23;
+
+    border-bottom:
+        2px solid #34495a;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 30px;
+
+    gap: 20px;
+}
+
+.title {
+    font-size: 26px;
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+.version {
+    margin-top: 4px;
+
+    font-size: 13px;
+
+    color: #8fa4b5;
+}
+
+
+/* ========================================
+   STATUS PANEL
+   ======================================== */
+
+.status-panel {
+    display: flex;
+
+    gap: 30px;
+
+    align-items: center;
+}
+
+.status-item {
+    text-align: center;
+}
+
+.status-label {
+    font-size: 11px;
+
+    color: #8295a5;
+
+    letter-spacing: 1px;
+}
+
+.status-value {
+    margin-top: 5px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* ========================================
+   CONTROL BUTTONS
+   ======================================== */
+
+.control-buttons {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+.control-buttons button {
+    padding: 9px 14px;
+
+    border:
+        1px solid #526979;
+
+    border-radius: 4px;
+
+    background: #1b2a35;
+    color: #d8e2ea;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.control-buttons button:hover {
+    background: #263b4a;
+}
+
+
+/* ========================================
+   MAIN DISPLAY
+   ======================================== */
+
+.main-display {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+
+    margin: 12px;
+}
+
+.display-panel {
+    min-height: 430px;
+
+    background: #101820;
+
+    border:
+        1px solid #34495a;
+
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+.panel-title {
+    padding: 12px 16px;
+
+    border-bottom:
+        1px solid #34495a;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.display-content {
+    height: 370px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #617586;
+}
+
+
+/* ========================================
+   TACTICAL DISPLAY
+   ======================================== */
+
+.tactical-content {
+    padding: 0;
+
+    overflow: hidden;
+}
+
+#tacticalCanvas {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+
+/* ========================================
+   TARGET ESTIMATE
+   ======================================== */
+
+.estimate-panel {
+    margin: 0 12px 12px;
+
+    padding: 18px;
+
+    background: #111a23;
+
+    border:
+        1px solid #34495a;
+
+    border-radius: 6px;
+}
+
+.estimate-title {
+    font-size: 15px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 16px;
+}
+
+.estimate-controls {
+    display: flex;
+
+    align-items: end;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+.input-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.input-group label {
+    font-size: 11px;
+
+    color: #8fa4b5;
+}
+
+.input-group input {
+    width: 130px;
+
+    padding: 10px;
+
+    background: #071017;
+    color: white;
+
+    border:
+        1px solid #526979;
+
+    border-radius: 4px;
+
+    font-size: 18px;
+}
+
+.submit-button {
+    padding: 11px 28px;
+
+    border:
+        1px solid #8295a5;
+
+    border-radius: 4px;
+
+    background: #263746;
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background: #344b5e;
+}
+
+
+/* ========================================
+   REPORT HISTORY
+   ======================================== */
+
+.report-panel {
+    margin: 0 12px 12px;
+
+    padding: 18px;
+
+    border:
+        1px solid #344957;
+
+    border-radius: 6px;
+
+    background: #111b22;
+}
+
+
+/* ========================================
+   REPORT HEADER / ROW
+   ======================================== */
+
+.report-row {
+    display: grid;
+
+    grid-template-columns:
+        0.7fr
+        1fr
+        1fr
+        1fr;
+
+    align-items: center;
+
+    min-height: 42px;
+
+    border-bottom:
+        1px solid #263844;
+
+    text-align: center;
+}
+
+.report-header {
+    font-size: 12px;
+    font-weight: bold;
+
+    color: #8fa4b5;
+
+    border-bottom:
+        1px solid #456273;
+}
+
+
+/* ========================================
+   REPORT DATA
+   ======================================== */
+
+.report-history-body {
+    width: 100%;
+
+    max-height: 260px;
+
+    overflow-y: auto;
+}
+
+.report-history-body .report-row {
+    font-size: 15px;
+
+    color: #d8e2ea;
+}
+
+.report-history-body
+.report-row div:first-child {
+    font-weight: bold;
+}
+
+
+/* ========================================
+   NO REPORTS
+   ======================================== */
+
+.report-empty {
+    display: block;
+
+    padding: 16px;
+
+    text-align: center;
+
+    color: #667985;
+
+    font-size: 13px;
+}
+
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+
+.report-history-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.report-history-body::-webkit-scrollbar-track {
+    background: #0c1419;
+}
+
+.report-history-body::-webkit-scrollbar-thumb {
+    background: #344957;
+
+    border-radius: 4px;
+}
+
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 700px) {
+
+    .header {
+        min-height: auto;
+
+        padding: 14px;
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .version {
+        font-size: 11px;
+    }
+
+    .status-panel {
+        width: 100%;
+
+        gap: 15px;
+
+        flex-wrap: wrap;
+
+        justify-content: space-between;
+    }
+
+    .status-value {
+        font-size: 17px;
+    }
+
+    .control-buttons {
+        width: 100%;
+    }
+
+    .control-buttons button {
+        flex: 1;
+
+        min-width: 70px;
+    }
+
+    .main-display {
+        margin: 8px;
+    }
+
+    .display-panel {
+        min-height: 360px;
+    }
+
+    .display-content {
+        height: 310px;
+    }
+
+    .estimate-panel {
+        margin: 0 8px 8px;
+
+        padding: 12px;
+    }
+
+    .estimate-controls {
+        gap: 10px;
+    }
+
+    .input-group {
+        flex: 1;
+
+        min-width: 120px;
+    }
+
+    .input-group input {
+        width: 100%;
+    }
+
+    .submit-button {
+        width: 100%;
+    }
+
+    .report-panel {
+        margin: 0 8px 8px;
+
+        padding: 12px;
+    }
+
+    .report-row {
+        grid-template-columns:
+            0.65fr
+            0.9fr
+            1fr
+            1fr;
+
+        min-height: 38px;
+    }
+
+    .report-header {
+        font-size: 10px;
+    }
+
+    .report-history-body .report-row {
+        font-size: 12px;
+    }
+}
+/* ========================================
+   INSTRUCTOR CONTROL
+   ======================================== */
+
+.instructor-panel {
+    margin: 12px;
+
+    padding: 18px;
+
+    background: #111a23;
+
+    border: 1px solid #34495a;
+    border-radius: 6px;
+}
+
+
+/* ========================================
+   INSTRUCTOR CONTROLS
+   ======================================== */
+
+.instructor-controls {
+    display: flex;
+
+    align-items: end;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+
+/* ========================================
+   SELECT
+   ======================================== */
+
+.input-group select {
+    width: 160px;
+
+    padding: 10px;
+
+    background: #071017;
+    color: white;
+
+    border: 1px solid #526979;
+    border-radius: 4px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+/* ========================================
+   ACTIVE SETTINGS
+   ======================================== */
+
+.instructor-info {
+    min-width: 120px;
+
+    padding: 8px 14px;
+
+    border-left: 1px solid #34495a;
+}
+
+.instructor-value {
+    margin-top: 5px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    color: #d8e2ea;
+}
+
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 700px) {
+
+    .instructor-panel {
+        margin: 8px;
+
+        padding: 12px;
+    }
+
+    .instructor-controls {
+        gap: 10px;
+    }
+
+    .instructor-controls .input-group {
+        flex: 1;
+
+        min-width: 130px;
+    }
+
+    .input-group select {
+        width: 100%;
+    }
+
+    .instructor-info {
+        flex: 1;
+
+        min-width: 120px;
+
+        border-left: none;
+
+        border-top: 1px solid #34495a;
+
+        padding: 10px 0;
+    }
+}
+/* ========================================
+   FINAL RESULT
+   ======================================== */
+
+.result-panel {
+    margin: 0 12px 20px;
+    padding: 18px;
+
+    background: #111a23;
+
+    border: 1px solid #34495a;
+    border-radius: 6px;
+}
+
+.result-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(150px, 1fr));
+
+    gap: 12px;
+}
+
+.result-item {
+    min-height: 72px;
+
+    padding: 12px 14px;
+
+    background: #0b141b;
+
+    border: 1px solid #293d4b;
+    border-radius: 4px;
+}
+
+.result-label {
+    font-size: 11px;
+
+    color: #8295a5;
+
+    letter-spacing: 1px;
+}
+
+.result-value {
+    margin-top: 8px;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    color: #d8e2ea;
+}
+
+
+/* END SCENARIO BUTTON */
+
+.end-button {
+    border-color: #805757 !important;
+}
+
+
+/* ENDED INPUT STATE */
+
+.scenario-locked {
+    opacity: 0.55;
+
+    pointer-events: none;
+}
+
+
+/* ========================================
+   TABLET
+   ======================================== */
+
+@media (max-width: 900px) {
+
+    .result-grid {
+        grid-template-columns:
+            repeat(2, minmax(140px, 1fr));
+    }
+}
+
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 700px) {
+
+    .result-panel {
+        margin: 0 8px 12px;
+
+        padding: 12px;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+    .result-item {
+        min-height: 64px;
+
+        padding: 10px;
+    }
+
+    .result-label {
+        font-size: 9px;
+    }
+
+    .result-value {
+        font-size: 17px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+    <!-- ========================================
+         HEADER
+         ======================================== -->
+
+    <header class="header">
+
+        <div>
+
+            <div class="title">
+                ACOUSTIC DOPPLER TRAINER
+            </div>
+
+            <div class="version">
+                OFFLINE TRAINING SYSTEM · VERSION 1.0
+            </div>
+
+        </div>
+
+
+        <!-- ====================================
+             STATUS / CONTROL
+             ==================================== -->
+
+        <div class="status-panel">
+
+            <div class="status-item">
+
+                <div class="status-label">
+                    SCENARIO TIME
+                </div>
+
+                <div
+                    class="status-value"
+                    id="scenarioTime"
+                >
+                    00:00
+                </div>
+
+            </div>
+
+
+            <div class="status-item">
+
+                <div class="status-label">
+                    STATUS
+                </div>
+
+                <div
+                    class="status-value"
+                    id="statusValue"
+                >
+                    READY
+                </div>
+
+            </div>
+
+
+            <div class="control-buttons">
+
+                <button
+                    onclick="newScenario()"
+                >
+                    NEW SCENARIO
+                </button>
+
+                <button
+                    onclick="playSimulation()"
+                >
+                    PLAY
+                </button>
+
+                <button
+                    onclick="pauseSimulation()"
+                >
+                    PAUSE
+                </button>
+
+                <button
+                    onclick="resetSimulation()"
+                >
+                    RESET
+                </button>
+
+                <button
+                    class="end-button"
+                    onclick="endScenario()"
+                >
+                    END SCENARIO
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ========================================
+         MAIN
+         ======================================== -->
+
+    <main>
+
+
+        <!-- ====================================
+             INSTRUCTOR CONTROL
+             ==================================== -->
+
+        <section class="instructor-panel">
+
+            <div class="estimate-title">
+                INSTRUCTOR CONTROL
+            </div>
+
+
+            <div class="instructor-controls">
+
+
+                <!-- SCENARIO MODE -->
+
+                <div class="input-group">
+
+                    <label for="scenarioModeInput">
+                        SCENARIO MODE
+                    </label>
+
+                    <select id="scenarioModeInput">
+
+                        <option value="BASIC">
+                            BASIC
+                        </option>
+
+                        <option
+                            value="NORMAL"
+                            selected
+                        >
+                            NORMAL
+                        </option>
+
+                        <option value="ADVANCED">
+                            ADVANCED
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TARGET SPEED -->
+
+                <div class="input-group">
+
+                    <label for="targetSpeedInput">
+                        TARGET SPEED (KT)
+                    </label>
+
+                    <input
+                        id="targetSpeedInput"
+                        type="number"
+                        value="10"
+                        min="1"
+                        max="40"
+                        step="1"
+                    >
+
+                </div>
+
+
+                <!-- ACTIVE MODE -->
+
+                <div class="instructor-info">
+
+                    <div class="status-label">
+                        ACTIVE MODE
+                    </div>
+
+                    <div
+                        class="instructor-value"
+                        id="activeMode"
+                    >
+                        NORMAL
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIVE SPEED -->
+
+                <div class="instructor-info">
+
+                    <div class="status-label">
+                        TARGET SPEED
+                    </div>
+
+                    <div
+                        class="instructor-value"
+                        id="activeSpeed"
+                    >
+                        10 KT
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================
+             TACTICAL DISPLAY
+             ==================================== -->
+
+        <section class="main-display">
+
+            <div class="display-panel">
+
+                <div class="panel-title">
+                    TACTICAL DISPLAY
+                </div>
+
+
+                <div
+                    class="display-content tactical-content"
+                >
+
+                    <canvas
+                        id="tacticalCanvas"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================
+             TARGET ESTIMATE
+             ==================================== -->
+
+        <section class="estimate-panel">
+
+            <div class="estimate-title">
+                TARGET ESTIMATE
+            </div>
+
+
+            <div class="estimate-controls">
+
+
+                <!-- BEARING -->
+
+                <div class="input-group">
+
+                    <label for="estimateBearing">
+                        BEARING
+                    </label>
+
+                    <input
+                        id="estimateBearing"
+                        type="number"
+                        placeholder="000"
+                        min="0"
+                        max="359"
+                    >
+
+                </div>
+
+
+                <!-- ESTIMATED HEADING -->
+
+                <div class="input-group">
+
+                    <label for="estimateHeading">
+                        EST HEADING
+                    </label>
+
+                    <input
+                        id="estimateHeading"
+                        type="number"
+                        placeholder="000"
+                        min="0"
+                        max="359"
+                    >
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    class="submit-button"
+                    onclick="submitEstimate()"
+                >
+                    SUBMIT ESTIMATE
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================
+             REPORT HISTORY
+             ==================================== -->
+
+        <section class="report-panel">
+
+            <div class="estimate-title">
+                REPORT HISTORY
+            </div>
+
+
+            <!-- REPORT HEADER -->
+
+            <div
+                class="report-row report-header"
+            >
+
+                <div>
+                    REPORT
+                </div>
+
+                <div>
+                    TIME
+                </div>
+
+                <div>
+                    BEARING
+                </div>
+
+                <div>
+                    EST HDG
+                </div>
+
+            </div>
+
+
+            <!-- REPORT DATA -->
+
+            <div
+                id="reportHistoryBody"
+                class="report-history-body"
+            >
+
+                <div
+                    class="report-row report-empty"
+                >
+
+                    <div>
+                        NO REPORTS
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================
+             FINAL RESULT
+             ==================================== -->
+
+        <section
+            class="result-panel"
+            id="finalResultPanel"
+        >
+
+            <div class="estimate-title">
+                FINAL RESULT
+            </div>
+
+
+            <div class="result-grid">
+
+
+                <!-- FINAL REPORT -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        FINAL REPORT
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultReport"
+                    >
+                        ---
+                    </div>
+
+                </div>
+
+
+                <!-- END TIME -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        END TIME
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultTime"
+                    >
+                        --:--
+                    </div>
+
+                </div>
+
+
+                <!-- FINAL BEARING -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        FINAL BEARING
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultBearing"
+                    >
+                        ---°
+                    </div>
+
+                </div>
+
+<!-- TRUE BEARING -->
+
+<div class="result-item">
+
+    <div class="result-label">
+        TRUE BEARING
+    </div>
+
+    <div
+        class="result-value"
+        id="resultTrueBearing"
+    >
+        ---°
+    </div>
+
+</div>
+
+
+<!-- BEARING ERROR -->
+
+<div class="result-item">
+
+    <div class="result-label">
+        BEARING ERROR
+    </div>
+
+    <div
+        class="result-value"
+        id="resultBearingError"
+    >
+        ---°
+    </div>
+
+</div>
+                <!-- ESTIMATED HEADING -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        FINAL EST HDG
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultEstimatedHeading"
+                    >
+                        ---°
+                    </div>
+
+                </div>
+
+
+                <!-- TRUE HEADING -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        TRUE HEADING
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultTrueHeading"
+                    >
+                        ---°
+                    </div>
+
+                </div>
+
+
+                <!-- HEADING ERROR -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        HEADING ERROR
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultHeadingError"
+                    >
+                        ---°
+                    </div>
+
+                </div>
+
+
+                <!-- REPORT COUNT -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        TOTAL REPORTS
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultReportCount"
+                    >
+                        0
+                    </div>
+
+                </div>
+
+
+                <!-- TARGET SPEED -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        TARGET SPEED
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultTargetSpeed"
+                    >
+                        --- KT
+                    </div>
+
+                </div>
+
+
+                <!-- SCENARIO MODE -->
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        SCENARIO MODE
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultScenarioMode"
+                    >
+                        ---
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ========================================
+         JAVASCRIPT
+         載入順序不要更動
+         ======================================== -->
+
+    <script>
+// ========================================
+// ACOUSTIC DOPPLER TRAINER
+// Simulation Engine
+// ========================================
+
+
+// ========================================
+// GLOBAL DATA
+// ========================================
+
+let sensors = [];
+
+let target = {
+    x: 0,
+    y: 0,
+
+    heading: 0,
+    speed: 10,
+
+    startX: 0,
+    startY: 0,
+    startHeading: 0,
+
+    hasTurn: false,
+    turnTime: 0,
+    turnAngle: 0,
+    newHeading: 0,
+    turnExecuted: false
+};
+
+
+// ========================================
+// SCENARIO SETTINGS
+// ========================================
+
+// BASIC / NORMAL / ADVANCED
+let scenarioMode = "NORMAL";
+
+// 目前預設 10 kt
+// 後續接 Instructor Control
+let instructorTargetSpeed = 10;
+
+
+// ========================================
+// ACOUSTIC PARAMETERS
+// ========================================
+
+const BASE_FREQUENCY = 500;   // Hz
+const SOUND_SPEED = 1500;     // m/s
+const CONTACT_RANGE = 2500;   // yd
+
+
+// ========================================
+// RANDOM NUMBER
+// ========================================
+
+function randomBetween(min, max) {
+
+    return min +
+        Math.random() * (max - min);
+}
+
+
+// ========================================
+// GENERATE D1-D6 SENSOR POSITIONS
+// ========================================
+
+function generateSensors() {
+
+    const gap12 =
+        randomBetween(1500, 2500);
+
+    const gap23 =
+        randomBetween(1500, 2500);
+
+    const rowGap =
+        randomBetween(1500, 2500);
+
+
+    // 每枚 Sensor 前後偏移 ±250 yd
+
+    const offset1 =
+        randomBetween(-250, 250);
+
+    const offset2 =
+        randomBetween(-250, 250);
+
+    const offset3 =
+        randomBetween(-250, 250);
+
+    const offset4 =
+        randomBetween(-250, 250);
+
+    const offset5 =
+        randomBetween(-250, 250);
+
+    const offset6 =
+        randomBetween(-250, 250);
+
+
+    sensors = [
+
+        // 第一排
+
+        {
+            id: "D1",
+            x: 0,
+            y: rowGap + offset1
+        },
+
+        {
+            id: "D2",
+            x: gap12,
+            y: rowGap + offset2
+        },
+
+        {
+            id: "D3",
+            x: gap12 + gap23,
+            y: rowGap + offset3
+        },
+
+
+        // 第二排
+
+        {
+            id: "D4",
+            x: 0,
+            y: offset4
+        },
+
+        {
+            id: "D5",
+            x: gap12,
+            y: offset5
+        },
+
+        {
+            id: "D6",
+            x: gap12 + gap23,
+            y: offset6
+        }
+    ];
+
+
+    console.log(
+        "D1-D6 SENSOR POSITIONS"
+    );
+
+
+    sensors.forEach(function (sensor) {
+
+        console.log(
+            sensor.id,
+            "X =", sensor.x.toFixed(1),
+            "Y =", sensor.y.toFixed(1)
+        );
+    });
+}
+
+
+// ========================================
+// GENERATE TARGET
+// ========================================
+
+function generateTarget() {
+
+    // TRUE HEADING 000-359
+
+    const targetHeading =
+        Math.floor(
+            Math.random() * 360
+        );
+
+
+    // Instructor Target Speed
+
+    const targetSpeed =
+        instructorTargetSpeed;
+
+
+    // D1-D6 幾何中心
+
+    const centerX =
+        sensors.reduce(
+            function (sum, sensor) {
+                return sum + sensor.x;
+            },
+            0
+        ) / sensors.length;
+
+
+    const centerY =
+        sensors.reduce(
+            function (sum, sensor) {
+                return sum + sensor.y;
+            },
+            0
+        ) / sensors.length;
+
+
+    // Excel：
+    // StartDistance = 500 × Target Speed
+
+    const startDistance =
+        500 * targetSpeed;
+
+
+    // 航跡左右偏移 ±1500 yd
+
+    const crossTrackOffset =
+        randomBetween(
+            -1500,
+            1500
+        );
+
+
+    const headingRad =
+        targetHeading *
+        Math.PI / 180;
+
+
+    // 偏移後通過點
+
+    const aimX =
+        centerX +
+        crossTrackOffset *
+        Math.cos(headingRad);
+
+
+    const aimY =
+        centerY -
+        crossTrackOffset *
+        Math.sin(headingRad);
+
+
+    // 沿航向反推 Target 起始位置
+
+    const targetX =
+        aimX -
+        startDistance *
+        Math.sin(headingRad);
+
+
+    const targetY =
+        aimY -
+        startDistance *
+        Math.cos(headingRad);
+
+
+    target = {
+
+        x: targetX,
+        y: targetY,
+
+        startX: targetX,
+        startY: targetY,
+
+        heading: targetHeading,
+        startHeading: targetHeading,
+
+        speed: targetSpeed,
+
+        hasTurn: false,
+        turnTime: 0,
+        turnAngle: 0,
+
+        newHeading:
+            targetHeading,
+
+        turnExecuted: false
+    };
+
+
+    // 建立本 Scenario 的轉向事件
+
+    generateTurnEvent();
+
+
+    console.log(
+        "TARGET",
+        "HDG =", target.heading,
+        "SPD =", target.speed,
+        "X =", target.x.toFixed(1),
+        "Y =", target.y.toFixed(1)
+    );
+}
+
+
+// ========================================
+// GENERATE TURN EVENT
+// ========================================
+
+function generateTurnEvent() {
+
+    let turnProbability = 0;
+
+
+    // ------------------------------------
+    // TURN PROBABILITY
+    // ------------------------------------
+
+    switch (scenarioMode.toUpperCase()) {
+
+        case "BASIC":
+
+            turnProbability = 0;
+
+            break;
+
+
+        case "NORMAL":
+
+            turnProbability = 0.3;
+
+            break;
+
+
+        case "ADVANCED":
+
+            turnProbability = 0.5;
+
+            break;
+
+
+        default:
+
+            turnProbability = 0.3;
+
+            break;
+    }
+
+
+    // ------------------------------------
+    // DETERMINE TURN / NO TURN
+    // ------------------------------------
+
+    if (Math.random() >= turnProbability) {
+
+        target.hasTurn = false;
+
+        target.turnTime = 0;
+        target.turnAngle = 0;
+
+        target.newHeading =
+            target.heading;
+
+        target.turnExecuted =
+            false;
+
+        return;
+    }
+
+
+    target.hasTurn = true;
+
+
+    // ------------------------------------
+    // TURN TIME
+    // Excel：
+    // 360 + Int(Rnd() * 37) * 10
+    // 06:00 ～ 12:00
+    // ------------------------------------
+
+    target.turnTime =
+        360 +
+        Math.floor(
+            Math.random() * 37
+        ) * 10;
+
+
+    // ------------------------------------
+    // TURN ANGLE
+    // ------------------------------------
+
+    let turnMagnitude;
+
+
+    if (
+        scenarioMode.toUpperCase() ===
+        "ADVANCED"
+    ) {
+
+        // 15° ～ 45°
+
+        turnMagnitude =
+            15 +
+            Math.floor(
+                Math.random() * 31
+            );
+
+    } else {
+
+        // NORMAL：10° ～ 30°
+
+        turnMagnitude =
+            10 +
+            Math.floor(
+                Math.random() * 21
+            );
+    }
+
+
+    // 左 / 右各 50%
+
+    if (Math.random() < 0.5) {
+
+        target.turnAngle =
+            -turnMagnitude;
+
+    } else {
+
+        target.turnAngle =
+            turnMagnitude;
+    }
+
+
+    // ------------------------------------
+    // NEW HEADING
+    // ------------------------------------
+
+    target.newHeading =
+        (
+            target.heading +
+            target.turnAngle +
+            360
+        ) % 360;
+
+
+    console.log(
+        "TURN EVENT",
+        "MODE =", scenarioMode,
+        "TIME =", target.turnTime,
+        "ANGLE =", target.turnAngle,
+        "NEW HDG =", target.newHeading
+    );
+}
+
+
+// ========================================
+// CHECK TARGET TURN
+// ========================================
+
+function checkTargetTurn() {
+
+    if (!target.hasTurn) {
+        return;
+    }
+
+    if (target.turnExecuted) {
+        return;
+    }
+
+    if (simTime < target.turnTime) {
+        return;
+    }
+
+
+    // 執行轉向
+
+    target.heading =
+        target.newHeading;
+
+    target.turnExecuted =
+        true;
+
+
+    console.log(
+        "TARGET TURN EXECUTED",
+        "TIME =", simTime,
+        "HDG =", target.heading
+    );
+}
+
+
+// ========================================
+// UPDATE TARGET POSITION
+// ========================================
+
+function updateTargetPosition(deltaTime) {
+
+    // 檢查是否到達轉向時間
+
+    checkTargetTurn();
+
+
+    const headingRad =
+        target.heading *
+        Math.PI / 180;
+
+
+    // Excel：
+    // Speed × 0.5626 × Time
+
+    const distance =
+        target.speed *
+        0.5626 *
+        deltaTime;
+
+
+    target.x +=
+        distance *
+        Math.sin(headingRad);
+
+
+    target.y +=
+        distance *
+        Math.cos(headingRad);
+}
+
+
+// ========================================
+// ACOUSTIC CALCULATION
+// ========================================
+
+function updateAcousticData() {
+
+    const headingRad =
+        target.heading *
+        Math.PI / 180;
+
+
+    sensors.forEach(function (sensor) {
+
+        // --------------------------------
+        // RANGE
+        // Excel CALC!G
+        // --------------------------------
+
+        const dx =
+            sensor.x -
+            target.x;
+
+        const dy =
+            sensor.y -
+            target.y;
+
+
+        sensor.range =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+
+        // --------------------------------
+        // RADIAL SPEED
+        // Excel CALC!H
+        // --------------------------------
+
+        sensor.radialSpeed =
+            target.speed *
+            (
+                dx *
+                Math.sin(headingRad) +
+
+                dy *
+                Math.cos(headingRad)
+            ) /
+            sensor.range;
+
+
+        // --------------------------------
+        // DOPPLER FREQUENCY
+        // Excel CALC!I
+        // --------------------------------
+
+        sensor.frequency =
+            BASE_FREQUENCY *
+            SOUND_SPEED /
+            (
+                SOUND_SPEED -
+                sensor.radialSpeed *
+                0.514444
+            );
+
+
+        // --------------------------------
+        // CONTACT
+        // --------------------------------
+
+        sensor.hasContact =
+            sensor.range <=
+            CONTACT_RANGE;
+    });
+}
+</script>
+
+    <script>
+// ========================================
+// ACOUSTIC DOPPLER TRAINER
+// Tactical Display
+// ========================================
+
+const tacticalCanvas =
+    document.getElementById("tacticalCanvas");
+
+const tacticalCtx =
+    tacticalCanvas.getContext("2d");
+
+
+// ========================================
+// RESIZE CANVAS
+// ========================================
+
+function resizeTacticalCanvas() {
+
+    const parent =
+        tacticalCanvas.parentElement;
+
+    tacticalCanvas.width =
+        parent.clientWidth;
+
+    tacticalCanvas.height =
+        parent.clientHeight;
+
+    drawTacticalDisplay();
+}
+
+
+// ========================================
+// WORLD → CANVAS
+// ========================================
+
+function worldToCanvas(x, y) {
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+        return {
+            x: tacticalCanvas.width / 2,
+            y: tacticalCanvas.height / 2
+        };
+    }
+
+
+    const sensorX =
+        sensors.map(function (sensor) {
+            return sensor.x;
+        });
+
+    const sensorY =
+        sensors.map(function (sensor) {
+            return sensor.y;
+        });
+
+
+    let minX =
+        Math.min(...sensorX);
+
+    let maxX =
+        Math.max(...sensorX);
+
+    let minY =
+        Math.min(...sensorY);
+
+    let maxY =
+        Math.max(...sensorY);
+
+
+    // ====================================
+    // DEBRIEF MODE
+    //
+    // END 後才把真實 Target 航跡
+    // 納入畫面範圍
+    // ====================================
+
+    if (
+        typeof scenarioEnded !== "undefined" &&
+        scenarioEnded &&
+        typeof target !== "undefined"
+    ) {
+
+        const targetPoints = [];
+
+
+        // Target 起始位置
+
+        if (
+            Number.isFinite(target.startX) &&
+            Number.isFinite(target.startY)
+        ) {
+
+            targetPoints.push({
+                x: target.startX,
+                y: target.startY
+            });
+        }
+
+
+        // 每筆 Report 當下 Target 位置
+
+        if (
+            typeof estimates !== "undefined" &&
+            estimates.length > 0
+        ) {
+
+            estimates.forEach(
+                function (estimate) {
+
+                    if (
+                        Number.isFinite(estimate.targetX) &&
+                        Number.isFinite(estimate.targetY)
+                    ) {
+
+                        targetPoints.push({
+                            x: estimate.targetX,
+                            y: estimate.targetY
+                        });
+                    }
+                }
+            );
+        }
+
+
+        // END 當下 Target 位置
+
+        if (
+            Number.isFinite(target.x) &&
+            Number.isFinite(target.y)
+        ) {
+
+            targetPoints.push({
+                x: target.x,
+                y: target.y
+            });
+        }
+
+
+        targetPoints.forEach(
+            function (point) {
+
+                minX =
+                    Math.min(minX, point.x);
+
+                maxX =
+                    Math.max(maxX, point.x);
+
+                minY =
+                    Math.min(minY, point.y);
+
+                maxY =
+                    Math.max(maxY, point.y);
+            }
+        );
+    }
+
+
+    // ====================================
+    // PADDING
+    // ====================================
+
+    const paddingX = 1500;
+    const paddingY = 1200;
+
+    minX -= paddingX;
+    maxX += paddingX;
+
+    minY -= paddingY;
+    maxY += paddingY;
+
+
+    // 防止除以 0
+
+    if (maxX === minX) {
+        maxX += 1;
+    }
+
+    if (maxY === minY) {
+        maxY += 1;
+    }
+
+
+    const px =
+        (
+            (x - minX) /
+            (maxX - minX)
+        ) *
+        tacticalCanvas.width;
+
+
+    const py =
+        tacticalCanvas.height -
+        (
+            (y - minY) /
+            (maxY - minY)
+        ) *
+        tacticalCanvas.height;
+
+
+    return {
+        x: px,
+        y: py
+    };
+}
+
+
+// ========================================
+// GET D1-D6 CENTER
+// ========================================
+
+function getSensorCenter() {
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+
+        return {
+            x: 0,
+            y: 0
+        };
+    }
+
+
+    const centerX =
+        sensors.reduce(
+            function (sum, sensor) {
+                return sum + sensor.x;
+            },
+            0
+        ) / sensors.length;
+
+
+    const centerY =
+        sensors.reduce(
+            function (sum, sensor) {
+                return sum + sensor.y;
+            },
+            0
+        ) / sensors.length;
+
+
+    return {
+        x: centerX,
+        y: centerY
+    };
+}
+
+
+// ========================================
+// DRAW SENSOR
+// ========================================
+
+function drawSensor(sensor) {
+
+    const p =
+        worldToCanvas(
+            sensor.x,
+            sensor.y
+        );
+
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.arc(
+        p.x,
+        p.y,
+        6,
+        0,
+        Math.PI * 2
+    );
+
+    tacticalCtx.fillStyle =
+        "#d8e2ea";
+
+    tacticalCtx.fill();
+
+
+    // Sensor ID
+
+    tacticalCtx.font =
+        "bold 14px Arial";
+
+    tacticalCtx.fillStyle =
+        "#d8e2ea";
+
+    tacticalCtx.fillText(
+        sensor.id,
+        p.x + 10,
+        p.y - 10
+    );
+
+
+    // Frequency / Contact
+
+    tacticalCtx.font =
+        "12px Arial";
+
+    if (sensor.hasContact) {
+
+        tacticalCtx.fillText(
+            sensor.frequency.toFixed(2) +
+            " Hz",
+            p.x + 10,
+            p.y + 8
+        );
+
+    } else {
+
+        tacticalCtx.fillText(
+            "NO CONTACT",
+            p.x + 10,
+            p.y + 8
+        );
+    }
+}
+
+
+// ========================================
+// DRAW SENSOR CENTER
+// Bearing Reference Point
+// ========================================
+
+function drawSensorCenter() {
+
+    const center =
+        getSensorCenter();
+
+    const p =
+        worldToCanvas(
+            center.x,
+            center.y
+        );
+
+
+    tacticalCtx.save();
+
+    tacticalCtx.strokeStyle =
+        "#6f8797";
+
+    tacticalCtx.lineWidth = 1;
+
+
+    // Cross
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.moveTo(
+        p.x - 7,
+        p.y
+    );
+
+    tacticalCtx.lineTo(
+        p.x + 7,
+        p.y
+    );
+
+    tacticalCtx.moveTo(
+        p.x,
+        p.y - 7
+    );
+
+    tacticalCtx.lineTo(
+        p.x,
+        p.y + 7
+    );
+
+    tacticalCtx.stroke();
+
+
+    // Center Circle
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.arc(
+        p.x,
+        p.y,
+        3,
+        0,
+        Math.PI * 2
+    );
+
+    tacticalCtx.fillStyle =
+        "#6f8797";
+
+    tacticalCtx.fill();
+
+
+    tacticalCtx.restore();
+}
+
+
+// ========================================
+// CALCULATE BEARING LINE END
+//
+// 讓 Bearing Line 自動畫到
+// Tactical Display 邊界附近
+// ========================================
+
+function getBearingLineEnd(
+    center,
+    bearing
+) {
+
+    const bearingRad =
+        bearing *
+        Math.PI / 180;
+
+
+    // 足夠長即可
+    const lineLength =
+        20000;
+
+
+    return {
+
+        x:
+            center.x +
+            lineLength *
+            Math.sin(bearingRad),
+
+        y:
+            center.y +
+            lineLength *
+            Math.cos(bearingRad)
+    };
+}
+
+
+// ========================================
+// DRAW ONE BEARING LINE
+// ========================================
+
+function drawBearingLine(
+    estimate,
+    index,
+    isLatest
+) {
+
+    const center =
+        getSensorCenter();
+
+
+    const endWorld =
+        getBearingLineEnd(
+            center,
+            estimate.bearing
+        );
+
+
+    const start =
+        worldToCanvas(
+            center.x,
+            center.y
+        );
+
+
+    const rawEnd =
+        worldToCanvas(
+            endWorld.x,
+            endWorld.y
+        );
+
+
+    // ====================================
+    // CLIP LINE TO CANVAS
+    // ====================================
+
+    const dx =
+        rawEnd.x - start.x;
+
+    const dy =
+        rawEnd.y - start.y;
+
+
+    let scale = 1;
+
+
+    const margin = 35;
+
+
+    if (dx > 0) {
+
+        scale =
+            Math.min(
+                scale,
+                (
+                    tacticalCanvas.width -
+                    margin -
+                    start.x
+                ) / dx
+            );
+    }
+
+
+    if (dx < 0) {
+
+        scale =
+            Math.min(
+                scale,
+                (
+                    margin -
+                    start.x
+                ) / dx
+            );
+    }
+
+
+    if (dy > 0) {
+
+        scale =
+            Math.min(
+                scale,
+                (
+                    tacticalCanvas.height -
+                    margin -
+                    start.y
+                ) / dy
+            );
+    }
+
+
+    if (dy < 0) {
+
+        scale =
+            Math.min(
+                scale,
+                (
+                    margin -
+                    start.y
+                ) / dy
+            );
+    }
+
+
+    scale =
+        Math.max(
+            0,
+            Math.min(scale, 1)
+        );
+
+
+    const end = {
+
+        x:
+            start.x +
+            dx * scale,
+
+        y:
+            start.y +
+            dy * scale
+    };
+
+
+    tacticalCtx.save();
+
+
+    // ====================================
+    // OLD REPORT
+    // ====================================
+
+    if (!isLatest) {
+
+        tacticalCtx.strokeStyle =
+            "rgba(216, 226, 234, 0.25)";
+
+        tacticalCtx.fillStyle =
+            "rgba(216, 226, 234, 0.55)";
+
+        tacticalCtx.lineWidth = 1;
+
+        tacticalCtx.setLineDash(
+            [5, 5]
+        );
+    }
+
+
+    // ====================================
+    // LATEST REPORT
+    // ====================================
+
+    if (isLatest) {
+
+        tacticalCtx.strokeStyle =
+            "#d8e2ea";
+
+        tacticalCtx.fillStyle =
+            "#d8e2ea";
+
+        tacticalCtx.lineWidth = 2;
+
+        tacticalCtx.setLineDash([]);
+    }
+
+
+    // Bearing Line
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.moveTo(
+        start.x,
+        start.y
+    );
+
+    tacticalCtx.lineTo(
+        end.x,
+        end.y
+    );
+
+    tacticalCtx.stroke();
+
+
+    // Label
+
+    tacticalCtx.setLineDash([]);
+
+    tacticalCtx.font =
+        isLatest
+            ? "bold 13px Arial"
+            : "11px Arial";
+
+
+    const label =
+        estimate.report +
+        " " +
+        String(
+            Math.round(
+                estimate.bearing
+            )
+        ).padStart(3, "0") +
+        "°";
+
+
+    // 避免文字超出右邊
+
+    const textWidth =
+        tacticalCtx.measureText(
+            label
+        ).width;
+
+
+    let labelX =
+        end.x + 6;
+
+    let labelY =
+        end.y;
+
+
+    if (
+        labelX +
+        textWidth >
+        tacticalCanvas.width - 5
+    ) {
+
+        labelX =
+            end.x -
+            textWidth -
+            6;
+    }
+
+
+    if (labelY < 15) {
+        labelY = 15;
+    }
+
+
+    if (
+        labelY >
+        tacticalCanvas.height - 5
+    ) {
+
+        labelY =
+            tacticalCanvas.height - 5;
+    }
+
+
+    tacticalCtx.fillText(
+        label,
+        labelX,
+        labelY
+    );
+
+
+    tacticalCtx.restore();
+}
+
+
+// ========================================
+// DRAW ALL REPORT BEARINGS
+// ========================================
+
+function drawReportBearings() {
+
+    if (
+        typeof estimates === "undefined" ||
+        estimates.length === 0
+    ) {
+        return;
+    }
+
+
+    estimates.forEach(
+        function (estimate, index) {
+
+            const isLatest =
+                index ===
+                estimates.length - 1;
+
+
+            drawBearingLine(
+                estimate,
+                index,
+                isLatest
+            );
+        }
+    );
+}
+
+
+// ========================================
+// DRAW TARGET START POSITION
+// DEBRIEF ONLY
+// ========================================
+
+function drawTargetStartPosition() {
+
+    if (
+        typeof target === "undefined" ||
+        !Number.isFinite(target.startX) ||
+        !Number.isFinite(target.startY)
+    ) {
+        return;
+    }
+
+
+    const p =
+        worldToCanvas(
+            target.startX,
+            target.startY
+        );
+
+
+    tacticalCtx.save();
+
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.arc(
+        p.x,
+        p.y,
+        5,
+        0,
+        Math.PI * 2
+    );
+
+    tacticalCtx.fillStyle =
+        "#8fa4b5";
+
+    tacticalCtx.fill();
+
+
+    tacticalCtx.font =
+        "bold 11px Arial";
+
+    tacticalCtx.fillStyle =
+        "#8fa4b5";
+
+    tacticalCtx.fillText(
+        "START",
+        p.x + 8,
+        p.y - 7
+    );
+
+
+    tacticalCtx.restore();
+}
+
+
+// ========================================
+// DRAW TRUE TARGET TRACK
+//
+// START → R1 → R2 → ... → Rn → END
+//
+// DEBRIEF ONLY
+// ========================================
+
+function drawTrueTargetTrack() {
+
+    if (
+        typeof target === "undefined"
+    ) {
+        return;
+    }
+
+
+    const trackPoints = [];
+
+
+    // START
+
+    if (
+        Number.isFinite(target.startX) &&
+        Number.isFinite(target.startY)
+    ) {
+
+        trackPoints.push({
+            x: target.startX,
+            y: target.startY
+        });
+    }
+
+
+    // REPORT POSITIONS
+
+    if (
+        typeof estimates !== "undefined"
+    ) {
+
+        estimates.forEach(
+            function (estimate) {
+
+                if (
+                    Number.isFinite(estimate.targetX) &&
+                    Number.isFinite(estimate.targetY)
+                ) {
+
+                    trackPoints.push({
+                        x: estimate.targetX,
+                        y: estimate.targetY
+                    });
+                }
+            }
+        );
+    }
+
+
+    // END
+
+    if (
+        Number.isFinite(target.x) &&
+        Number.isFinite(target.y)
+    ) {
+
+        trackPoints.push({
+            x: target.x,
+            y: target.y
+        });
+    }
+
+
+    if (trackPoints.length < 2) {
+        return;
+    }
+
+
+    tacticalCtx.save();
+
+
+    tacticalCtx.strokeStyle =
+        "#6fa7c4";
+
+    tacticalCtx.lineWidth = 2;
+
+    tacticalCtx.setLineDash([]);
+
+
+    tacticalCtx.beginPath();
+
+
+    trackPoints.forEach(
+        function (point, index) {
+
+            const p =
+                worldToCanvas(
+                    point.x,
+                    point.y
+                );
+
+
+            if (index === 0) {
+
+                tacticalCtx.moveTo(
+                    p.x,
+                    p.y
+                );
+
+            } else {
+
+                tacticalCtx.lineTo(
+                    p.x,
+                    p.y
+                );
+            }
+        }
+    );
+
+
+    tacticalCtx.stroke();
+
+
+    tacticalCtx.restore();
+}
+
+
+// ========================================
+// DRAW REPORT TARGET POSITIONS
+//
+// R1 / R2 / R3 ...
+// DEBRIEF ONLY
+// ========================================
+
+function drawReportTargetPositions() {
+
+    if (
+        typeof estimates === "undefined" ||
+        estimates.length === 0
+    ) {
+        return;
+    }
+
+
+    estimates.forEach(
+        function (estimate) {
+
+            if (
+                !Number.isFinite(estimate.targetX) ||
+                !Number.isFinite(estimate.targetY)
+            ) {
+                return;
+            }
+
+
+            const p =
+                worldToCanvas(
+                    estimate.targetX,
+                    estimate.targetY
+                );
+
+
+            tacticalCtx.save();
+
+
+            // Position Dot
+
+            tacticalCtx.beginPath();
+
+            tacticalCtx.arc(
+                p.x,
+                p.y,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+            tacticalCtx.fillStyle =
+                "#6fa7c4";
+
+            tacticalCtx.fill();
+
+
+            // Label
+
+            tacticalCtx.font =
+                "bold 11px Arial";
+
+            tacticalCtx.fillStyle =
+                "#8fc3dc";
+
+            tacticalCtx.fillText(
+                estimate.report,
+                p.x + 8,
+                p.y - 8
+            );
+
+
+            tacticalCtx.restore();
+        }
+    );
+}
+
+
+// ========================================
+// DRAW HEADING ARROW
+//
+// 使用最後一筆 Report 當下的
+// 真實位置與真實航向
+// ========================================
+
+function drawTrueHeadingArrow() {
+
+    if (
+        typeof estimates === "undefined" ||
+        estimates.length === 0
+    ) {
+        return;
+    }
+
+
+    const finalEstimate =
+        estimates[
+            estimates.length - 1
+        ];
+
+
+    if (
+        !Number.isFinite(
+            finalEstimate.targetX
+        ) ||
+        !Number.isFinite(
+            finalEstimate.targetY
+        ) ||
+        !Number.isFinite(
+            finalEstimate.trueHeading
+        )
+    ) {
+        return;
+    }
+
+
+    const start =
+        worldToCanvas(
+            finalEstimate.targetX,
+            finalEstimate.targetY
+        );
+
+
+    const headingRad =
+        finalEstimate.trueHeading *
+        Math.PI / 180;
+
+
+    // Canvas coordinates:
+    // East = +X
+    // North = -Y
+
+    const arrowLength = 55;
+
+
+    const endX =
+        start.x +
+        arrowLength *
+        Math.sin(headingRad);
+
+
+    const endY =
+        start.y -
+        arrowLength *
+        Math.cos(headingRad);
+
+
+    tacticalCtx.save();
+
+
+    tacticalCtx.strokeStyle =
+        "#8fc3dc";
+
+    tacticalCtx.fillStyle =
+        "#8fc3dc";
+
+    tacticalCtx.lineWidth = 3;
+
+
+    // Main Arrow Line
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.moveTo(
+        start.x,
+        start.y
+    );
+
+    tacticalCtx.lineTo(
+        endX,
+        endY
+    );
+
+    tacticalCtx.stroke();
+
+
+    // Arrow Head
+
+    const arrowAngle =
+        Math.atan2(
+            endY - start.y,
+            endX - start.x
+        );
+
+
+    const headLength = 10;
+
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.moveTo(
+        endX,
+        endY
+    );
+
+
+    tacticalCtx.lineTo(
+        endX -
+        headLength *
+        Math.cos(
+            arrowAngle -
+            Math.PI / 6
+        ),
+
+        endY -
+        headLength *
+        Math.sin(
+            arrowAngle -
+            Math.PI / 6
+        )
+    );
+
+
+    tacticalCtx.lineTo(
+        endX -
+        headLength *
+        Math.cos(
+            arrowAngle +
+            Math.PI / 6
+        ),
+
+        endY -
+        headLength *
+        Math.sin(
+            arrowAngle +
+            Math.PI / 6
+        )
+    );
+
+
+    tacticalCtx.closePath();
+
+    tacticalCtx.fill();
+
+
+    // Heading Label
+
+    tacticalCtx.font =
+        "bold 12px Arial";
+
+
+    tacticalCtx.fillText(
+        "TRUE HDG " +
+        String(
+            Math.round(
+                finalEstimate.trueHeading
+            )
+        ).padStart(3, "0") +
+        "°",
+
+        endX + 8,
+        endY
+    );
+
+
+    tacticalCtx.restore();
+}
+
+
+// ========================================
+// DRAW END POSITION
+// ========================================
+
+function drawTargetEndPosition() {
+
+    if (
+        typeof target === "undefined" ||
+        !Number.isFinite(target.x) ||
+        !Number.isFinite(target.y)
+    ) {
+        return;
+    }
+
+
+    const p =
+        worldToCanvas(
+            target.x,
+            target.y
+        );
+
+
+    tacticalCtx.save();
+
+
+    tacticalCtx.beginPath();
+
+    tacticalCtx.arc(
+        p.x,
+        p.y,
+        6,
+        0,
+        Math.PI * 2
+    );
+
+    tacticalCtx.fillStyle =
+        "#b6d8e8";
+
+    tacticalCtx.fill();
+
+
+    tacticalCtx.font =
+        "bold 11px Arial";
+
+    tacticalCtx.fillStyle =
+        "#b6d8e8";
+
+    tacticalCtx.fillText(
+        "END",
+        p.x + 9,
+        p.y + 4
+    );
+
+
+    tacticalCtx.restore();
+}
+
+
+// ========================================
+// DRAW DEBRIEF DATA
+// ========================================
+
+function drawDebriefDisplay() {
+
+    if (
+        typeof scenarioEnded === "undefined" ||
+        !scenarioEnded
+    ) {
+        return;
+    }
+
+
+    drawTrueTargetTrack();
+
+    drawTargetStartPosition();
+
+    drawReportTargetPositions();
+
+    drawTargetEndPosition();
+
+    drawTrueHeadingArrow();
+}
+
+
+// ========================================
+// DRAW TACTICAL DISPLAY
+// ========================================
+
+function drawTacticalDisplay() {
+
+    tacticalCtx.clearRect(
+        0,
+        0,
+        tacticalCanvas.width,
+        tacticalCanvas.height
+    );
+
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+        return;
+    }
+
+
+    // ====================================
+    // 1. TRUE TARGET TRACK
+    // END 後才顯示
+    // ====================================
+
+    drawDebriefDisplay();
+
+
+    // ====================================
+    // 2. STUDENT BEARING LINES
+    // ====================================
+
+    drawReportBearings();
+
+
+    // ====================================
+    // 3. BEARING REFERENCE CENTER
+    // ====================================
+
+    drawSensorCenter();
+
+
+    // ====================================
+    // 4. D1-D6
+    // ====================================
+
+    sensors.forEach(
+        function (sensor) {
+
+            drawSensor(sensor);
+        }
+    );
+}
+
+
+// ========================================
+// WINDOW RESIZE
+// ========================================
+
+window.addEventListener(
+    "resize",
+    resizeTacticalCanvas
+);
+</script>
+
+    <script>
+// ========================================
+// ACOUSTIC DOPPLER TRAINER
+// Application Controller
+// ========================================
+
+
+// ========================================
+// GLOBAL STATE
+// ========================================
+
+let simTime = 0;
+let isRunning = false;
+let timer = null;
+
+let scenarioEnded = false;
+
+// Student Reports
+// R1 → R2 → R3 → ... → Rn
+let estimates = [];
+
+
+// ========================================
+// TIME FORMAT
+// ========================================
+
+function formatTime(seconds) {
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+    const secs =
+        seconds % 60;
+
+    return (
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(secs).padStart(2, "0")
+    );
+}
+
+
+// ========================================
+// ANGLE FORMAT
+// ========================================
+
+function formatAngle(angle) {
+
+    if (
+        angle === null ||
+        angle === undefined ||
+        !Number.isFinite(angle)
+    ) {
+        return "---°";
+    }
+
+    let normalized =
+        Math.round(angle) % 360;
+
+    if (normalized < 0) {
+        normalized += 360;
+    }
+
+    return (
+        String(normalized).padStart(3, "0") +
+        "°"
+    );
+}
+
+
+// ========================================
+// ANGULAR ERROR
+// ========================================
+
+function calculateAngularError(
+    estimatedAngle,
+    trueAngle
+) {
+
+    let difference =
+        Math.abs(
+            estimatedAngle -
+            trueAngle
+        );
+
+    difference =
+        difference % 360;
+
+    if (difference > 180) {
+        difference =
+            360 - difference;
+    }
+
+    return difference;
+}
+
+
+// ========================================
+// GET D1-D6 CENTER
+// ========================================
+
+function getReportReferenceCenter() {
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+        return null;
+    }
+
+    const centerX =
+        sensors.reduce(
+            function (sum, sensor) {
+                return sum + sensor.x;
+            },
+            0
+        ) / sensors.length;
+
+    const centerY =
+        sensors.reduce(
+            function (sum, sensor) {
+                return sum + sensor.y;
+            },
+            0
+        ) / sensors.length;
+
+    return {
+        x: centerX,
+        y: centerY
+    };
+}
+
+
+// ========================================
+// CALCULATE TRUE BEARING
+//
+// D1-D6 CENTER → TARGET
+//
+// 000 = NORTH
+// 090 = EAST
+// 180 = SOUTH
+// 270 = WEST
+// ========================================
+
+function calculateTrueBearing() {
+
+    const center =
+        getReportReferenceCenter();
+
+    if (!center) {
+        return null;
+    }
+
+    const dx =
+        target.x - center.x;
+
+    const dy =
+        target.y - center.y;
+
+    let bearing =
+        Math.atan2(
+            dx,
+            dy
+        ) *
+        180 /
+        Math.PI;
+
+    bearing =
+        (bearing + 360) % 360;
+
+    return bearing;
+}
+
+
+// ========================================
+// UPDATE TIME DISPLAY
+// ========================================
+
+function updateDisplay() {
+
+    const timeElement =
+        document.getElementById(
+            "scenarioTime"
+        );
+
+    if (timeElement) {
+
+        timeElement.textContent =
+            formatTime(simTime);
+    }
+}
+
+
+// ========================================
+// UPDATE REPORT HISTORY
+//
+// TRAINING:
+// REPORT / TIME / BEARING / EST HDG
+//
+// ENDED:
+// REPORT / TIME / EST BRG / TRUE BRG /
+// BRG ERR / EST HDG / TRUE HDG / HDG ERR
+// ========================================
+
+function updateReportHistory() {
+
+    const reportBody =
+        document.getElementById(
+            "reportHistoryBody"
+        );
+
+    if (!reportBody) {
+        return;
+    }
+
+    const reportPanel =
+        reportBody.closest(
+            ".report-panel"
+        );
+
+    const reportHeader =
+        reportPanel
+            ? reportPanel.querySelector(
+                ".report-header"
+            )
+            : null;
+
+
+    // ====================================
+    // TRAINING MODE HEADER
+    // ====================================
+
+    if (!scenarioEnded) {
+
+        if (reportHeader) {
+
+            reportHeader.style.gridTemplateColumns =
+                "0.7fr 1fr 1fr 1fr";
+
+            reportHeader.innerHTML = `
+                <div>REPORT</div>
+                <div>TIME</div>
+                <div>BEARING</div>
+                <div>EST HDG</div>
+            `;
+        }
+
+        reportBody.classList.remove(
+            "debrief-history"
+        );
+    }
+
+
+    // ====================================
+    // DEBRIEF HEADER
+    // ====================================
+
+    if (scenarioEnded) {
+
+        if (reportHeader) {
+
+            reportHeader.style.gridTemplateColumns =
+                "0.7fr 0.9fr 1fr 1fr 0.9fr 1fr 1fr 0.9fr";
+
+            reportHeader.innerHTML = `
+                <div>REPORT</div>
+                <div>TIME</div>
+                <div>EST BRG</div>
+                <div>TRUE BRG</div>
+                <div>BRG ERR</div>
+                <div>EST HDG</div>
+                <div>TRUE HDG</div>
+                <div>HDG ERR</div>
+            `;
+        }
+
+        reportBody.classList.add(
+            "debrief-history"
+        );
+    }
+
+
+    reportBody.innerHTML = "";
+
+
+    // ====================================
+    // NO REPORTS
+    // ====================================
+
+    if (estimates.length === 0) {
+
+        const emptyRow =
+            document.createElement("div");
+
+        emptyRow.className =
+            "report-row report-empty";
+
+        emptyRow.innerHTML =
+            "<div>NO REPORTS</div>";
+
+        reportBody.appendChild(
+            emptyRow
+        );
+
+        return;
+    }
+
+
+    // ====================================
+    // CREATE REPORT ROWS
+    // ====================================
+
+    estimates.forEach(
+        function (estimate, index) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "report-row";
+
+            const isLatest =
+                index ===
+                estimates.length - 1;
+
+            const reportLabel =
+                isLatest
+                    ? estimate.report + " ★"
+                    : estimate.report;
+
+
+            // =================================
+            // TRAINING VIEW
+            // =================================
+
+            if (!scenarioEnded) {
+
+                row.style.gridTemplateColumns =
+                    "0.7fr 1fr 1fr 1fr";
+
+                row.innerHTML = `
+                    <div>
+                        ${reportLabel}
+                    </div>
+
+                    <div>
+                        ${formatTime(estimate.time)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.bearing)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.heading)}
+                    </div>
+                `;
+            }
+
+
+            // =================================
+            // DEBRIEF VIEW
+            // =================================
+
+            if (scenarioEnded) {
+
+                row.style.gridTemplateColumns =
+                    "0.7fr 0.9fr 1fr 1fr 0.9fr 1fr 1fr 0.9fr";
+
+                row.innerHTML = `
+                    <div>
+                        ${reportLabel}
+                    </div>
+
+                    <div>
+                        ${formatTime(estimate.time)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.bearing)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.trueBearing)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.bearingError)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.heading)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.trueHeading)}
+                    </div>
+
+                    <div>
+                        ${formatAngle(estimate.headingError)}
+                    </div>
+                `;
+            }
+
+            reportBody.appendChild(
+                row
+            );
+        }
+    );
+
+
+    reportBody.scrollTop =
+        reportBody.scrollHeight;
+}
+
+
+// ========================================
+// CLEAR FINAL RESULT
+// ========================================
+
+function clearFinalResult() {
+
+    const values = {
+
+        resultReport:
+            "---",
+
+        resultTime:
+            "--:--",
+
+        resultBearing:
+            "---°",
+
+        resultTrueBearing:
+            "---°",
+
+        resultBearingError:
+            "---°",
+
+        resultEstimatedHeading:
+            "---°",
+
+        resultTrueHeading:
+            "---°",
+
+        resultHeadingError:
+            "---°",
+
+        resultReportCount:
+            "0",
+
+        resultTargetSpeed:
+            "--- KT",
+
+        resultScenarioMode:
+            "---"
+    };
+
+
+    Object.keys(values).forEach(
+        function (id) {
+
+            const element =
+                document.getElementById(id);
+
+            if (element) {
+
+                element.textContent =
+                    values[id];
+            }
+        }
+    );
+}
+
+
+// ========================================
+// LOCK STUDENT INPUT
+// ========================================
+
+function lockStudentInput() {
+
+    const estimatePanel =
+        document.querySelector(
+            ".estimate-panel"
+        );
+
+    if (estimatePanel) {
+
+        estimatePanel.classList.add(
+            "scenario-locked"
+        );
+    }
+
+
+    const bearingInput =
+        document.getElementById(
+            "estimateBearing"
+        );
+
+    const headingInput =
+        document.getElementById(
+            "estimateHeading"
+        );
+
+
+    if (bearingInput) {
+        bearingInput.disabled = true;
+    }
+
+    if (headingInput) {
+        headingInput.disabled = true;
+    }
+}
+
+
+// ========================================
+// UNLOCK STUDENT INPUT
+// ========================================
+
+function unlockStudentInput() {
+
+    const estimatePanel =
+        document.querySelector(
+            ".estimate-panel"
+        );
+
+    if (estimatePanel) {
+
+        estimatePanel.classList.remove(
+            "scenario-locked"
+        );
+    }
+
+
+    const bearingInput =
+        document.getElementById(
+            "estimateBearing"
+        );
+
+    const headingInput =
+        document.getElementById(
+            "estimateHeading"
+        );
+
+
+    if (bearingInput) {
+
+        bearingInput.disabled = false;
+        bearingInput.value = "";
+    }
+
+    if (headingInput) {
+
+        headingInput.disabled = false;
+        headingInput.value = "";
+    }
+}
+
+
+// ========================================
+// PLAY
+// ========================================
+
+function playSimulation() {
+
+    if (scenarioEnded) {
+
+        alert(
+            "Scenario 已結束。\n" +
+            "請按 RESET 或 NEW SCENARIO。"
+        );
+
+        return;
+    }
+
+
+    if (isRunning) {
+        return;
+    }
+
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+
+        alert(
+            "請先按 NEW SCENARIO 建立情境。"
+        );
+
+        return;
+    }
+
+
+    isRunning = true;
+
+
+    const statusElement =
+        document.getElementById(
+            "statusValue"
+        );
+
+    if (statusElement) {
+
+        statusElement.textContent =
+            "RUNNING";
+    }
+
+
+    timer =
+        setInterval(
+            function () {
+
+                simTime += 10;
+
+                updateTargetPosition(10);
+
+                updateAcousticData();
+
+                updateDisplay();
+
+                drawTacticalDisplay();
+
+            },
+            1000
+        );
+}
+
+
+// ========================================
+// PAUSE
+// ========================================
+
+function pauseSimulation() {
+
+    if (scenarioEnded) {
+        return;
+    }
+
+
+    isRunning = false;
+
+
+    if (timer !== null) {
+
+        clearInterval(timer);
+
+        timer = null;
+    }
+
+
+    const statusElement =
+        document.getElementById(
+            "statusValue"
+        );
+
+    if (statusElement) {
+
+        statusElement.textContent =
+            "PAUSED";
+    }
+}
+
+
+// ========================================
+// RESET
+//
+// SAME SCENARIO → 00:00
+// ========================================
+
+function resetSimulation() {
+
+    isRunning = false;
+    scenarioEnded = false;
+
+
+    if (timer !== null) {
+
+        clearInterval(timer);
+
+        timer = null;
+    }
+
+
+    unlockStudentInput();
+
+
+    simTime = 0;
+
+    estimates = [];
+
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+
+        updateDisplay();
+
+        updateReportHistory();
+
+        clearFinalResult();
+
+
+        const statusElement =
+            document.getElementById(
+                "statusValue"
+            );
+
+        if (statusElement) {
+
+            statusElement.textContent =
+                "READY";
+        }
+
+        return;
+    }
+
+
+    // ====================================
+    // RESTORE TARGET INITIAL POSITION
+    // ====================================
+
+    target.x =
+        target.startX;
+
+    target.y =
+        target.startY;
+
+
+    // ====================================
+    // RESTORE INITIAL HEADING
+    // ====================================
+
+    if (
+        target.startHeading !== undefined
+    ) {
+
+        target.heading =
+            target.startHeading;
+    }
+
+
+    // ====================================
+    // RESET TURN EVENT
+    // ====================================
+
+    if (
+        target.turnExecuted !== undefined
+    ) {
+
+        target.turnExecuted =
+            false;
+    }
+
+
+    updateAcousticData();
+
+    updateDisplay();
+
+    updateReportHistory();
+
+    clearFinalResult();
+
+    drawTacticalDisplay();
+
+
+    const statusElement =
+        document.getElementById(
+            "statusValue"
+        );
+
+    if (statusElement) {
+
+        statusElement.textContent =
+            "READY";
+    }
+
+
+    console.log(
+        "SCENARIO RESET",
+        "HDG =", target.heading,
+        "SPD =", target.speed
+    );
+}
+
+
+// ========================================
+// NEW SCENARIO
+// ========================================
+
+function newScenario() {
+
+    isRunning = false;
+    scenarioEnded = false;
+
+
+    if (timer !== null) {
+
+        clearInterval(timer);
+
+        timer = null;
+    }
+
+
+    // ====================================
+    // INSTRUCTOR SETTINGS
+    // ====================================
+
+    const modeInput =
+        document.getElementById(
+            "scenarioModeInput"
+        );
+
+    const speedInput =
+        document.getElementById(
+            "targetSpeedInput"
+        );
+
+
+    // ====================================
+    // MODE
+    // ====================================
+
+    if (modeInput) {
+
+        scenarioMode =
+            modeInput.value;
+    }
+
+
+    // ====================================
+    // SPEED
+    // ====================================
+
+    if (speedInput) {
+
+        const selectedSpeed =
+            Number(
+                speedInput.value
+            );
+
+
+        if (
+            !Number.isFinite(selectedSpeed) ||
+            selectedSpeed < 1 ||
+            selectedSpeed > 40
+        ) {
+
+            alert(
+                "Target Speed 必須設定為 1～40 KT。"
+            );
+
+            return;
+        }
+
+
+        instructorTargetSpeed =
+            selectedSpeed;
+    }
+
+
+    unlockStudentInput();
+
+
+    simTime = 0;
+
+    estimates = [];
+
+
+    generateSensors();
+
+    generateTarget();
+
+    updateAcousticData();
+
+
+    // ====================================
+    // ACTIVE SETTINGS
+    // ====================================
+
+    const activeMode =
+        document.getElementById(
+            "activeMode"
+        );
+
+    const activeSpeed =
+        document.getElementById(
+            "activeSpeed"
+        );
+
+
+    if (activeMode) {
+
+        activeMode.textContent =
+            scenarioMode;
+    }
+
+
+    if (activeSpeed) {
+
+        activeSpeed.textContent =
+            instructorTargetSpeed +
+            " KT";
+    }
+
+
+    updateDisplay();
+
+    updateReportHistory();
+
+    clearFinalResult();
+
+    resizeTacticalCanvas();
+
+
+    const statusElement =
+        document.getElementById(
+            "statusValue"
+        );
+
+    if (statusElement) {
+
+        statusElement.textContent =
+            "READY";
+    }
+
+
+    console.log(
+        "NEW SCENARIO",
+        "MODE =", scenarioMode,
+        "SPEED =", instructorTargetSpeed
+    );
+}
+
+
+// ========================================
+// SUBMIT STUDENT ESTIMATE
+//
+// EACH REPORT STORES:
+// Student Bearing
+// Student Heading
+// True Bearing
+// True Heading
+// Bearing Error
+// Heading Error
+// Target Position
+// ========================================
+
+function submitEstimate() {
+
+    if (scenarioEnded) {
+
+        alert(
+            "Scenario 已結束，無法再提交 Report。"
+        );
+
+        return;
+    }
+
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+
+        alert(
+            "請先建立 Scenario。"
+        );
+
+        return;
+    }
+
+
+    const bearingInput =
+        document.getElementById(
+            "estimateBearing"
+        );
+
+    const headingInput =
+        document.getElementById(
+            "estimateHeading"
+        );
+
+
+    if (
+        !bearingInput ||
+        !headingInput
+    ) {
+
+        console.error(
+            "Estimate input elements not found."
+        );
+
+        return;
+    }
+
+
+    if (
+        bearingInput.value === "" ||
+        headingInput.value === ""
+    ) {
+
+        alert(
+            "請輸入 Bearing 及 Estimated Heading。"
+        );
+
+        return;
+    }
+
+
+    const bearing =
+        Number(
+            bearingInput.value
+        );
+
+    const heading =
+        Number(
+            headingInput.value
+        );
+
+
+    if (
+        !Number.isFinite(bearing) ||
+        !Number.isFinite(heading)
+    ) {
+
+        alert(
+            "輸入資料格式錯誤。"
+        );
+
+        return;
+    }
+
+
+    if (
+        bearing < 0 ||
+        bearing > 359 ||
+        heading < 0 ||
+        heading > 359
+    ) {
+
+        alert(
+            "Bearing / Heading 必須為 000–359。"
+        );
+
+        return;
+    }
+
+
+    // ====================================
+    // CAPTURE TRUTH AT REPORT TIME
+    // ====================================
+
+    const trueBearing =
+        calculateTrueBearing();
+
+    const trueHeading =
+        target.heading;
+
+
+    const bearingError =
+        calculateAngularError(
+            bearing,
+            trueBearing
+        );
+
+    const headingError =
+        calculateAngularError(
+            heading,
+            trueHeading
+        );
+
+
+    // ====================================
+    // REPORT NUMBER
+    // ====================================
+
+    const reportNumber =
+        estimates.length + 1;
+
+
+    // ====================================
+    // CREATE REPORT
+    // ====================================
+
+    const estimate = {
+
+        report:
+            "R" + reportNumber,
+
+        time:
+            simTime,
+
+        // Student Estimate
+        bearing:
+            bearing,
+
+        heading:
+            heading,
+
+        // Hidden Truth
+        trueBearing:
+            trueBearing,
+
+        trueHeading:
+            trueHeading,
+
+        // Hidden Error
+        bearingError:
+            bearingError,
+
+        headingError:
+            headingError,
+
+        // Hidden Target Position
+        targetX:
+            target.x,
+
+        targetY:
+            target.y,
+
+        targetSpeed:
+            target.speed
+    };
+
+
+    estimates.push(
+        estimate
+    );
+
+
+    // Training view still hides truth
+    updateReportHistory();
+
+    drawTacticalDisplay();
+
+
+    console.log(
+        estimate.report,
+        "TIME =", formatTime(estimate.time),
+        "BRG =", estimate.bearing,
+        "HDG =", estimate.heading
+    );
+
+
+    bearingInput.value = "";
+
+    headingInput.value = "";
+
+    bearingInput.focus();
+
+
+    alert(
+        estimate.report +
+        " RECORDED\n" +
+        "TIME: " +
+        formatTime(estimate.time)
+    );
+}
+
+
+// ========================================
+// GET FINAL ESTIMATE
+// ========================================
+
+function getFinalEstimate() {
+
+    if (estimates.length === 0) {
+        return null;
+    }
+
+    return estimates[
+        estimates.length - 1
+    ];
+}
+
+
+// ========================================
+// END SCENARIO
+// ========================================
+
+function endScenario() {
+
+    if (
+        typeof sensors === "undefined" ||
+        !sensors ||
+        sensors.length === 0
+    ) {
+
+        alert(
+            "目前沒有 Scenario。"
+        );
+
+        return;
+    }
+
+
+    if (scenarioEnded) {
+
+        alert(
+            "Scenario 已經結束。"
+        );
+
+        return;
+    }
+
+
+    const finalEstimate =
+        getFinalEstimate();
+
+
+    if (!finalEstimate) {
+
+        alert(
+            "至少需要提交一筆 Report 才能結束 Scenario。"
+        );
+
+        return;
+    }
+
+
+    // ====================================
+    // STOP SIMULATION
+    // ====================================
+
+    isRunning = false;
+
+
+    if (timer !== null) {
+
+        clearInterval(timer);
+
+        timer = null;
+    }
+
+
+    scenarioEnded = true;
+
+
+    // ====================================
+    // FINAL RESULT USES TRUTH CAPTURED
+    // AT FINAL REPORT TIME
+    // ====================================
+
+    const estimatedBearing =
+        finalEstimate.bearing;
+
+    const trueBearing =
+        finalEstimate.trueBearing;
+
+    const bearingError =
+        finalEstimate.bearingError;
+
+
+    const estimatedHeading =
+        finalEstimate.heading;
+
+    const trueHeading =
+        finalEstimate.trueHeading;
+
+    const headingError =
+        finalEstimate.headingError;
+
+
+    // ====================================
+    // RESULT ELEMENTS
+    // ====================================
+
+    const resultReport =
+        document.getElementById(
+            "resultReport"
+        );
+
+    const resultTime =
+        document.getElementById(
+            "resultTime"
+        );
+
+    const resultBearing =
+        document.getElementById(
+            "resultBearing"
+        );
+
+    const resultTrueBearing =
+        document.getElementById(
+            "resultTrueBearing"
+        );
+
+    const resultBearingError =
+        document.getElementById(
+            "resultBearingError"
+        );
+
+    const resultEstimatedHeading =
+        document.getElementById(
+            "resultEstimatedHeading"
+        );
+
+    const resultTrueHeading =
+        document.getElementById(
+            "resultTrueHeading"
+        );
+
+    const resultHeadingError =
+        document.getElementById(
+            "resultHeadingError"
+        );
+
+    const resultReportCount =
+        document.getElementById(
+            "resultReportCount"
+        );
+
+    const resultTargetSpeed =
+        document.getElementById(
+            "resultTargetSpeed"
+        );
+
+    const resultScenarioMode =
+        document.getElementById(
+            "resultScenarioMode"
+        );
+
+
+    // ====================================
+    // DISPLAY FINAL RESULT
+    // ====================================
+
+    if (resultReport) {
+
+        resultReport.textContent =
+            finalEstimate.report;
+    }
+
+
+    if (resultTime) {
+
+        resultTime.textContent =
+            formatTime(
+                finalEstimate.time
+            );
+    }
+
+
+    if (resultBearing) {
+
+        resultBearing.textContent =
+            formatAngle(
+                estimatedBearing
+            );
+    }
+
+
+    if (resultTrueBearing) {
+
+        resultTrueBearing.textContent =
+            formatAngle(
+                trueBearing
+            );
+    }
+
+
+    if (resultBearingError) {
+
+        resultBearingError.textContent =
+            formatAngle(
+                bearingError
+            );
+    }
+
+
+    if (resultEstimatedHeading) {
+
+        resultEstimatedHeading.textContent =
+            formatAngle(
+                estimatedHeading
+            );
+    }
+
+
+    if (resultTrueHeading) {
+
+        resultTrueHeading.textContent =
+            formatAngle(
+                trueHeading
+            );
+    }
+
+
+    if (resultHeadingError) {
+
+        resultHeadingError.textContent =
+            formatAngle(
+                headingError
+            );
+    }
+
+
+    if (resultReportCount) {
+
+        resultReportCount.textContent =
+            estimates.length;
+    }
+
+
+    if (resultTargetSpeed) {
+
+        resultTargetSpeed.textContent =
+            finalEstimate.targetSpeed +
+            " KT";
+    }
+
+
+    if (resultScenarioMode) {
+
+        resultScenarioMode.textContent =
+            scenarioMode;
+    }
+
+
+    // ====================================
+    // LOCK STUDENT INPUT
+    // ====================================
+
+    lockStudentInput();
+
+
+    // ====================================
+    // STATUS
+    // ====================================
+
+    const statusElement =
+        document.getElementById(
+            "statusValue"
+        );
+
+    if (statusElement) {
+
+        statusElement.textContent =
+            "ENDED";
+    }
+
+
+    // ====================================
+    // DEBRIEF VIEW
+    // ====================================
+
+    updateReportHistory();
+
+    drawTacticalDisplay();
+
+
+    console.log(
+        "SCENARIO ENDED",
+
+        "FINAL REPORT =",
+        finalEstimate.report,
+
+        "EST BRG =",
+        estimatedBearing,
+
+        "TRUE BRG =",
+        trueBearing,
+
+        "BRG ERROR =",
+        bearingError,
+
+        "EST HDG =",
+        estimatedHeading,
+
+        "TRUE HDG =",
+        trueHeading,
+
+        "HDG ERROR =",
+        headingError
+    );
+}
+
+
+// ========================================
+// INITIAL DISPLAY
+// ========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        updateDisplay();
+
+        updateReportHistory();
+
+        clearFinalResult();
+
+        unlockStudentInput();
+    }
+);
+</script>
+
+</body>
+
+</html>
