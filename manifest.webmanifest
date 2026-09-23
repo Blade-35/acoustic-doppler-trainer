@@ -1,0 +1,13 @@
+{
+  "name": "Acoustic Doppler Trainer",
+  "short_name": "Doppler Trainer",
+  "description": "Acoustic Doppler Training Simulator",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1016",
+  "theme_color": "#0b1016",
+  "lang": "en",
+  "icons": []
+}
